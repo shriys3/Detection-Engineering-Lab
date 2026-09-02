@@ -59,8 +59,10 @@ CommandLine="* -e *" OR CommandLine="* -en *" OR CommandLine="* -enc *" OR Comma
 
 **What it caught:** A `powershell.exe` process launched with `-e <base64>`, spawned from `cmd.exe`. This process pattern of a PowerShell launched by cmd rather than directly by a user is an indicator worth flagging.
 
-insert images here 
 
+<img width="1726" height="754" alt="Encoded Powershell" src="https://github.com/user-attachments/assets/dcd87e31-8474-46de-b364-ef061d626627" />
+
+<img width="1362" height="847" alt="Encoded Powershell result" src="https://github.com/user-attachments/assets/73188a76-760e-4f54-9402-d7e876eea8f1" /><img width="972" height="592" alt="scheduled task execution" src="https://github.com/user-attachments/assets/8e523d3c-b143-4829-9584-574bccc33938" />
 
 
 
@@ -78,15 +80,14 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*schtasks.exe* CommandLine="*Creat
  
 **Attack simulation:**
  
-insert image here 
-
+<img width="972" height="592" alt="scheduled task execution" src="https://github.com/user-attachments/assets/9e49627b-1256-4c32-a18b-d1efa414c0ff" />
  
 **What it caught:** `schtasks.exe /Create /SC ONCE /TN spawn /TR C:\windows\system32\cmd.exe /ST 20:10` a scheduled task set to relaunch `cmd.exe` at a specified time, spawned from `cmd.exe` itself.
  
+ <img width="1728" height="770" alt="Scheduled Task Creation" src="https://github.com/user-attachments/assets/392e89f5-5b26-4d7a-bdec-f7116763f306" />
+
  
-insert images
-
-
+<img width="1362" height="858" alt="Scheduled Task Creation result" src="https://github.com/user-attachments/assets/f8880f50-f865-4222-aa23-07a7306064df" />
 
 
 
@@ -104,11 +105,16 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*systeminfo.exe*
  
 **Attack simulation:**
  
-insert image
+
+<img width="1260" height="896" alt="discovery execution" src="https://github.com/user-attachments/assets/6482a23b-ac0f-4a69-a5ce-5d61b74a866d" />
+
+
  
 **What it caught:** `systeminfo.exe` was launched from the command interface `cmd.exe`, alongside a chained `reg query` command against a path leading to the Windows registry hardware database. Both gather two differnt categories of information (host info + hardware enumeration) in a single command chain, signaling a possible attacker recon action.
  
-images insert here 
+<img width="1727" height="727" alt="discovery" src="https://github.com/user-attachments/assets/d037e7c1-9f0d-4e24-a023-23d09a9d616f" />
+
+<img width="1359" height="857" alt="discovery result" src="https://github.com/user-attachments/assets/d44a20e4-de37-40d4-b7a9-a3a8b3ca19f2" />
 
 
 ## MITRE ATT&CK Coverage
@@ -122,8 +128,7 @@ images insert here
 
 ## Generated Splunk Reports/Alerts 
 
-insert 
-
+<img width="1470" height="548" alt="reports" src="https://github.com/user-attachments/assets/9e4f45cd-1055-483e-aa68-fa7876027f65" />
 
 ## Other Notes
  
@@ -136,7 +141,6 @@ insert
 - Translating MITRE ATT&CK techniques into a concrete, testable detection query
 - Understanding why a detection works and its context to pattern match based on multiple indicators
 - Validating detections against live, controlled attack simulation
-
 
 
 
