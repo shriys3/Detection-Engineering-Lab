@@ -2,7 +2,7 @@
 A home lab simulating real MITRE ATT&CK techniques with Atomic Red Team, capturing telemetry with Sysmon, and building Splunk detection queries mapped to specific attacker behaviors.
 
 ### Objective
-This project focuses on the detection aspect of security, using SIEM queries and tools paralleling SOC analyst work. Each query was validated against a triggered live, safe attack simulation.
+This project focuses on the detection aspect of security, using SIEM queries and tools paralleling components of a SOC detection workflow. Each query was validated against a triggered live, safe attack simulation.
 
 ### Architecture
 ```
@@ -59,6 +59,8 @@ CommandLine="* -e *" OR CommandLine="* -en *" OR CommandLine="* -enc *" OR Comma
 
 **What it caught:** A `powershell.exe` process launched with `-e <base64>`, spawned from `cmd.exe`. This process pattern of a PowerShell launched by cmd with an encoded command, rather than directly by a user, can be an indicator worth flagging.
 
+**Detection considerations:** Encoded PowerShell commands aren't inherently malicious and may be used legitimately by administrative scripts. However, encoded execution can warrant investigation when combined with suspicious parent processes or other unusual activity. A more refined tuning could more comprehensively incorporate parent process, context, and analysis of the decoded command to reduce false positives.
+
 **Search results:**
 <img width="1726" height="754" alt="Encoded Powershell" src="https://github.com/user-attachments/assets/dcd87e31-8474-46de-b364-ef061d626627" />
 
@@ -68,7 +70,7 @@ CommandLine="* -e *" OR CommandLine="* -en *" OR CommandLine="* -enc *" OR Comma
 ### 2. Scheduled Task Creation — [T1053.005](https://attack.mitre.org/techniques/T1053/005/)
 **Tactic:** Persistence
  
-Attackers use the Windows Task Scheduler to establish persistence. This ensures their access to a system survives a reboot or re-executes later without further interaction. `schtasks.exe` is a legitimate system binary, meaning it is the actual Windows program that creates scheduled tasks. As detection cannot only flag this value, it must combine that with the `/Create` action and its invocation via `cmd.exe` rather than the Task Scheduler GUI. Being launched from the command line, especially chained inside another command, is a pattern much more associated with scripts and automation that attackers are more likely to deploy. 
+Attackers use the Windows Task Scheduler to establish persistence. This ensures their access to a system survives a reboot or re-executes later without further interaction. `schtasks.exe` is a legitimate system binary, meaning it is the actual Windows program that creates scheduled tasks. As detection cannot only flag this value, it must combine that with the `/Create` action and its invocation via `cmd.exe` rather than the Task Scheduler GUI. Being launched from the command line, especially chained inside another command, is a pattern much more associated with scripts and automation.
  
 **Simulated with:** `Invoke-AtomicTest T1053.005 -TestNumbers 2`
  
@@ -82,6 +84,8 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*schtasks.exe* CommandLine="*Creat
 <img width="972" height="592" alt="scheduled task execution" src="https://github.com/user-attachments/assets/9e49627b-1256-4c32-a18b-d1efa414c0ff" />
  
 **What it caught:** `schtasks.exe /Create /SC ONCE /TN spawn /TR C:\windows\system32\cmd.exe /ST 20:10` a scheduled task set to relaunch `cmd.exe` at a specified time, spawned from `cmd.exe` itself.
+
+**Detection considerations:** Scheduled tasks are often created for legitimate administrative and software operations, so schtasks.exe /Create alone does not indicate malicious activity. Requiring a cmd.exe parent narrows this detection to command-line task creation, but legitimate scripts may still trigger it. Additional refinement could consider the task name, execution path and context, and the program specified by /TR.
 
  **Search results:**
  <img width="1728" height="770" alt="Scheduled Task Creation" src="https://github.com/user-attachments/assets/392e89f5-5b26-4d7a-bdec-f7116763f306" />
@@ -111,6 +115,8 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*systeminfo.exe*
 
  
 **What it caught:** `systeminfo.exe` was launched from the command interface `cmd.exe`, alongside a chained `reg query` command against a path leading to the Windows registry hardware database. Both gather two differnt categories of information (host info + hardware enumeration) in a single command chain, consistent with possible attacker recon behavior.
+
+**Detection considerations:** systeminfo.exe is a legitimate Windows utility, so its execution alone is a low-confidence indicator and may generate false positives from normal activity. It becomes more meaningful when correlated with other discovery commands, unusual parent processes, or suspicious activity happening in a similar timeframe. In this project, systeminfo.exe was executed alongside a registry query used to enumerate hardware information, which provides additional context consistent with system reconnaissance.
 
  **Search results:**
 <img width="1727" height="727" alt="discovery" src="https://github.com/user-attachments/assets/d037e7c1-9f0d-4e24-a023-23d09a9d616f" />
