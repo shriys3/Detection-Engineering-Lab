@@ -53,7 +53,7 @@ CommandLine="* -e *" OR CommandLine="* -en *" OR CommandLine="* -enc *" OR Comma
 
 **Attack simulation:**
 
-![Atomic Red Team executing T1059.001](lab-images/powershell-execution.png)
+![Atomic Red Team executing T1059.001](lab-images/powershell execution.png)
 
 
 **What it caught:** A `powershell.exe` process launched with `-e <base64>`, spawned from `cmd.exe`. This process pattern of a PowerShell launched by cmd rather than directly by a user is an indicator worth flagging.
