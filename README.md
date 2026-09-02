@@ -74,7 +74,7 @@ Attackers use the Windows Task Scheduler to establish persistence. This ensures 
  
 **Detection query:**
 ```spl
-index=* sourcetype=*sysmon* EventCode=1 Image=*schtasks.exe* CommandLine="*Create*"
+index=* sourcetype=*sysmon* EventCode=1 Image=*schtasks.exe* CommandLine="*Create*" ParentImage=*cmd.exe*
 ```
  
 **Attack simulation:**
@@ -110,7 +110,7 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*systeminfo.exe*
 
 
  
-**What it caught:** `systeminfo.exe` was launched from the command interface `cmd.exe`, alongside a chained `reg query` command against a path leading to the Windows registry hardware database. Both gather two differnt categories of information (host info + hardware enumeration) in a single command chain, signaling a possible attacker recon action.
+**What it caught:** `systeminfo.exe` was launched from the command interface `cmd.exe`, alongside a chained `reg query` command against a path leading to the Windows registry hardware database. Both gather two differnt categories of information (host info + hardware enumeration) in a single command chain, consistent with possible attacker recon behavior.
 
  **Search results:**
 <img width="1727" height="727" alt="discovery" src="https://github.com/user-attachments/assets/d037e7c1-9f0d-4e24-a023-23d09a9d616f" />
