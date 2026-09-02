@@ -59,7 +59,7 @@ CommandLine="* -e *" OR CommandLine="* -en *" OR CommandLine="* -enc *" OR Comma
 
 **What it caught:** A `powershell.exe` process launched with `-e <base64>`, spawned from `cmd.exe`. This process pattern of a PowerShell launched by cmd rather than directly by a user is an indicator worth flagging.
 
-
+**Search results:**
 <img width="1726" height="754" alt="Encoded Powershell" src="https://github.com/user-attachments/assets/dcd87e31-8474-46de-b364-ef061d626627" />
 
 <img width="1362" height="847" alt="Encoded Powershell result" src="https://github.com/user-attachments/assets/73188a76-760e-4f54-9402-d7e876eea8f1" />
@@ -82,7 +82,8 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*schtasks.exe* CommandLine="*Creat
 <img width="972" height="592" alt="scheduled task execution" src="https://github.com/user-attachments/assets/9e49627b-1256-4c32-a18b-d1efa414c0ff" />
  
 **What it caught:** `schtasks.exe /Create /SC ONCE /TN spawn /TR C:\windows\system32\cmd.exe /ST 20:10` a scheduled task set to relaunch `cmd.exe` at a specified time, spawned from `cmd.exe` itself.
- 
+
+ **Search results:**
  <img width="1728" height="770" alt="Scheduled Task Creation" src="https://github.com/user-attachments/assets/392e89f5-5b26-4d7a-bdec-f7116763f306" />
 
  
@@ -110,7 +111,8 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*systeminfo.exe*
 
  
 **What it caught:** `systeminfo.exe` was launched from the command interface `cmd.exe`, alongside a chained `reg query` command against a path leading to the Windows registry hardware database. Both gather two differnt categories of information (host info + hardware enumeration) in a single command chain, signaling a possible attacker recon action.
- 
+
+ **Search results:**
 <img width="1727" height="727" alt="discovery" src="https://github.com/user-attachments/assets/d037e7c1-9f0d-4e24-a023-23d09a9d616f" />
 
 <img width="1359" height="857" alt="discovery result" src="https://github.com/user-attachments/assets/d44a20e4-de37-40d4-b7a9-a3a8b3ca19f2" />
@@ -125,7 +127,7 @@ index=* sourcetype=*sysmon* EventCode=1 Image=*systeminfo.exe*
 | Discovery | System Information Discovery | T1082 |
  
 
-## Generated Splunk Reports/Alerts 
+## Generated Splunk Reports
 
 <img width="1470" height="548" alt="reports" src="https://github.com/user-attachments/assets/9e4f45cd-1055-483e-aa68-fa7876027f65" />
 
