@@ -62,8 +62,7 @@ CommandLine="* -e *" OR CommandLine="* -en *" OR CommandLine="* -enc *" OR Comma
 
 <img width="1726" height="754" alt="Encoded Powershell" src="https://github.com/user-attachments/assets/dcd87e31-8474-46de-b364-ef061d626627" />
 
-<img width="1362" height="847" alt="Encoded Powershell result" src="https://github.com/user-attachments/assets/73188a76-760e-4f54-9402-d7e876eea8f1" /><img width="972" height="592" alt="scheduled task execution" src="https://github.com/user-attachments/assets/8e523d3c-b143-4829-9584-574bccc33938" />
-
+<img width="1362" height="847" alt="Encoded Powershell result" src="https://github.com/user-attachments/assets/73188a76-760e-4f54-9402-d7e876eea8f1" />
 
 
 ### 2. Scheduled Task Creation — [T1053.005](https://attack.mitre.org/techniques/T1053/005/)
